@@ -40,8 +40,11 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireNonAlphanumeric = true;
-
     options.User.RequireUniqueEmail = true;
+
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); // Lock for 1 minute
+    options.Lockout.MaxFailedAccessAttempts = 3;                     // Max 3 failures
+    options.Lockout.AllowedForNewUsers = true;
 });
 
 builder.Services.AddCors(options =>
@@ -92,7 +95,7 @@ builder.Services.AddRateLimiter(options =>
                 ip,
                 _ => new FixedWindowRateLimiterOptions
                 {
-                    PermitLimit = 5,
+                    PermitLimit = 10,
                     Window = TimeSpan.FromMinutes(1),
                     QueueLimit = 0,
                     QueueProcessingOrder = QueueProcessingOrder.OldestFirst

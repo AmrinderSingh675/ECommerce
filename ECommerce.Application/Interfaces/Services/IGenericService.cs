@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Application.Interfaces.Services
 {
+    // A generic service that serves as the base implementation for specific entity services.
     public interface IGenericService<TEntity, TRequest, TResponse>
     where TEntity : class
     where TRequest : class

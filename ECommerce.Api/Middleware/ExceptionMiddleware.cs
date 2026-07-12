@@ -48,6 +48,15 @@ public class ExceptionMiddleware
             });
             //we can also log the error into database//
         }
+        catch (LockedException ex)
+        {
+            context.Response.StatusCode = StatusCodes.Status423Locked;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                message = ex.Message
+            });
+            //we can also log the error into database//
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, ex.Message);

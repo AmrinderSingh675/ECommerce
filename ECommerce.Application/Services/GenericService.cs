@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace ECommerce.Application.Services;
 
-//Generic Service which will work as the base for the other services
+//// A generic service that serves as the base implementation for specific entity services.
 public class GenericService<TEntity, TRequest, TResponse>
         : IGenericService<TEntity, TRequest, TResponse>
         where TEntity : class

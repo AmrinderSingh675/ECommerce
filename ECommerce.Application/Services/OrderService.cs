@@ -12,17 +12,47 @@ namespace ECommerce.Application.Services
     public class OrderService : GenericService<Order, OrderRequest, OrderResponse>, IOrderService
     {
         private readonly IGenericRepository<OrderItem> _orderItemRepository;
-        private readonly IGenericRepository<Order> _repository;
+        //private readonly IGenericRepository<Order> _repository;
+        private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
 
         public OrderService(
             IGenericRepository<Order> repository,
+            IOrderRepository orderRepository,
             IMapper mapper,
             IGenericRepository<OrderItem> orderItemRepository) : base(repository, mapper)
         {
             _orderItemRepository = orderItemRepository;
-            _repository = repository;
+            _orderRepository = orderRepository;
+            //_repository = repository;
             _mapper = mapper;
+        }
+
+        public async Task<List<OrderResponse>> GetOrdersAsync(Guid userId)
+        {
+            var orders = await _orderRepository.FindAsync(order => order.UserId == userId);
+            return orders.Select(order => new OrderResponse
+            {
+                Id = order.Id,
+                OrderNumber = order.OrderNumber,
+                UserId = order.UserId,
+                ShippingAddress = order.ShippingAddress,
+                City = order.City,
+                State = order.State,
+                Country = order.Country,
+                PostalCode = order.PostalCode,
+                TotalAmount = order.TotalAmount,
+                PaymentMethod = order.PaymentMethod,
+                PaymentStatus = order.PaymentStatus,
+                OrderStatus = order.OrderStatus
+            }).ToList();
+        }
+
+        public async Task<OrderResponse> GetOrderAsync(int id)
+        {
+            var result = await _orderRepository.GetOrderWithItemsAsync(id);
+            var order = _mapper.Map<OrderResponse>(result);
+            return order;
         }
 
         public async Task<OrderResponse> AddOrderAsync(Guid userId, OrderRequest request)
@@ -35,11 +65,11 @@ namespace ECommerce.Application.Services
             order.GSTAmount = request.GST;
             order.TotalAmount = request.Total;
             order.PayableAmount = request.Payable;
-            order = await _repository.AddAsync(order);
+            order = await _orderRepository.AddAsync(order);
 
             //Execute business rule: Generate custom Order Number using the generated ID
             order.OrderNumber = $"ORD-{DateTime.UtcNow:yyyyMMdd}-{order.Id}";
-            await _repository.UpdateAsync(order); // Update order with its new number
+            await _orderRepository.UpdateAsync(order); // Update order with its new number
 
             //Execute business rule: Handle Child Order Items
             if (request.Items != null && request.Items.Any())

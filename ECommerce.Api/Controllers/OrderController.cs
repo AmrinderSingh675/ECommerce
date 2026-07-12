@@ -33,14 +33,6 @@ public class OrderController : ControllerBase
         return Ok();
     }
 
-    [HttpPut("updateorder")]
-    public async Task<IActionResult> UpdateOrder(OrderRequest order)
-    {
-        //var result = await _orderService.UpdateAsync(order.Id, order);
-
-        return Ok();
-    }
-
     [HttpGet("getorders")]
     public async Task<IActionResult> GetOrders([FromQuery] FilterRequest request)
     {
@@ -50,14 +42,14 @@ public class OrderController : ControllerBase
             return Unauthorized("User ID is missing or invalid.");
         }
         //yet I did not implemented the paging
-        var result = await _orderService.GetAllAsync();
+        var result = await _orderService.GetOrdersAsync(userId);
         return Ok(result);
     }
 
-    [HttpGet("getorder")]
+    [HttpGet("getorder/{id}")]
     public async Task<IActionResult> GetOrder(int id)
     {
-        var result = await _orderService.GetByIdAsync(id);
+        var result = await _orderService.GetOrderAsync(id);
 
         return Ok(result);
     }

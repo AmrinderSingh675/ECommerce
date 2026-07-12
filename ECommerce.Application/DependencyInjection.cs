@@ -11,6 +11,7 @@ namespace ECommerce.Application
         //register all AutoMapper profiles found there
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            //registers the class into dependencies
             services.AddAutoMapper(typeof(DependencyInjection).Assembly);
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IProductService, ProductService>();

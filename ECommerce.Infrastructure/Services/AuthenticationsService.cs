@@ -4,6 +4,7 @@ using ECommerce.Application.Features.Authentication;
 using ECommerce.Application.Interfaces.Services;
 using ECommerce.Infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,7 +46,18 @@ public class AuthenticationsService : IAuthorizationsService
             throw new UnauthorizedException("Invalid email/mobile or password");
         }
 
-        var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+        //Check if the user is already locked out using UserManager
+        if (await _userManager.IsLockedOutAsync(user))
+        {
+            throw new LockedException("Account locked due to too many failed attempts. Try again in 1 minute.");
+        }
+
+        var result = await _signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: true);
+        //Set the 3rd parameter (lockoutOnFailure) to true
+        if (result.IsLockedOut)
+        {
+            throw new LockedException("Account locked due to too many failed attempts. Try again in 1 minute.");
+        }
         if (!result.Succeeded)
         {
             throw new UnauthorizedException("Invalid email/mobile or password");
@@ -84,12 +96,15 @@ public class AuthenticationsService : IAuthorizationsService
             FirstName = request.FirstName,
             LastName = request.LastName,
             Mobile = request.Mobile,
+            LockoutEnabled = true
         };
         var result = await _userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
         {
             throw new Exception(string.Join(",", result.Errors.Select(x => x.Description)));
         }
+
+        await _userManager.SetLockoutEnabledAsync(user, true);
 
         // Default role
         const string roleName = "Customer";

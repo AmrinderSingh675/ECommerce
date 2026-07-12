@@ -23,8 +23,9 @@ public static class DependencyInjection
             options.UseSqlServer(
                 configuration.GetConnectionString("eCommerceConnection")));
 
+        //registers the class into dependencies
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
+        services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
         services.AddScoped(typeof(IAuthorizationsService), typeof(AuthenticationsService));
         services.AddScoped(typeof(ITokenService), typeof(TokenService));
 

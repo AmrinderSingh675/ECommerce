@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ECommerce.Infrastructure.Persistence.Configurations;
+
+///having to manually register every single one in DbContext, I use ApplyConfigurationsFromAssembly.
+///Instead of writing modelBuilder.ApplyConfiguration(new ProductConfiguration()); 
+///for every entity, I just add one line inside DbContext class.
 public class OrderConfiguration : IEntityTypeConfiguration<Order>
 {
     public void Configure(EntityTypeBuilder<Order> builder)
