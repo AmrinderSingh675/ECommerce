@@ -1,5 +1,6 @@
 ﻿namespace ECommerce.Application.Common.Exceptions;
 
+// Custom exception class for handling locaked access errors in the middleware.
 public class LockedException : Exception
 {
     public LockedException(string message)

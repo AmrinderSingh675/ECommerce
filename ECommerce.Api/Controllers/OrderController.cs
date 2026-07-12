@@ -21,6 +21,7 @@ public class OrderController : ControllerBase
         _orderService = orderService;
     }
 
+    // Add the order details along with the line items.
     [HttpPost("addorder")]
     public async Task<IActionResult> AddOrder(OrderRequest order)
     {
@@ -33,6 +34,7 @@ public class OrderController : ControllerBase
         return Ok();
     }
 
+    //getting the order list
     [HttpGet("getorders")]
     public async Task<IActionResult> GetOrders([FromQuery] FilterRequest request)
     {
@@ -46,6 +48,7 @@ public class OrderController : ControllerBase
         return Ok(result);
     }
 
+    //getting the order detail by parameter id
     [HttpGet("getorder/{id}")]
     public async Task<IActionResult> GetOrder(int id)
     {

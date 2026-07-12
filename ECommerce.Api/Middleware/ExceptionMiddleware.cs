@@ -3,6 +3,7 @@ using ECommerce.Application.Common.Exceptions;
 
 namespace ECommerce.Api.Middleware;
 
+// Custom middleware for global error handling.
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;

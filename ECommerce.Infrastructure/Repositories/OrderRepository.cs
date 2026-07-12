@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Infrastructure.Repositories;
 
+//Created an entity-specific repository to implement custom business logic methods.
 public class OrderRepository : GenericRepository<Order>, IOrderRepository
 {
     public OrderRepository(ApplicationDbContext context)

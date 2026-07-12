@@ -18,6 +18,7 @@ public class ProductController : ControllerBase
         _productService = productService;
     }
 
+    //getting the list of products
     [HttpGet("getproducts")]
     public async Task<IActionResult> GetProducts([FromQuery] FilterRequest request)
     {
@@ -27,6 +28,7 @@ public class ProductController : ControllerBase
         return Ok(result);
     }
 
+    //getting the product detail by parameter id
     [HttpGet("getproduct")]
     public async Task<IActionResult> GetProduct(int id)
     {

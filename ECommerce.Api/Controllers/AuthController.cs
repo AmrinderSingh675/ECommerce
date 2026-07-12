@@ -10,12 +10,14 @@ namespace ECommerce.Api.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
+    //injecting the interfaces into constructor
     private readonly IAuthorizationsService _service;
     public AuthController(IAuthorizationsService service)
     {
         _service = service;
     }
 
+    // register the user
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest request)
     {
@@ -24,6 +26,7 @@ public class AuthController : ControllerBase
         return Ok(result);
     }
 
+    //login the user and return the jwt token 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {

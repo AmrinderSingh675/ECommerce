@@ -9,6 +9,7 @@ using ECommerce.Domain.Entities;
 
 namespace ECommerce.Application.Services
 {
+    ////Created an entity-specific service to implement custom business logic methods.
     public class OrderService : GenericService<Order, OrderRequest, OrderResponse>, IOrderService
     {
         private readonly IGenericRepository<OrderItem> _orderItemRepository;

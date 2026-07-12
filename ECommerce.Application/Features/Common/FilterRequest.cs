@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Application.Features.Common
 {
+    // A generic class for managing query filter parameters.
     public class FilterRequest
     {
         public string? Key { get; set; } = string.Empty;
