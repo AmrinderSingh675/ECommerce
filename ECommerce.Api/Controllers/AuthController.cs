@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ECommerce.Application.Features.Authentication;
 using ECommerce.Application.Interfaces.Services;
-using System.ComponentModel.DataAnnotations;
-using ECommerce.Application.Common.Exceptions;
 
 namespace ECommerce.Api.Controllers;
 

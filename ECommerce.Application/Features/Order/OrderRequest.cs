@@ -4,9 +4,8 @@ public record OrderRequest
 {
     public Guid UserId { get; set; }
     public decimal TotalAmount { get; set; }
-    public decimal Total { get; set; }
-    public decimal GST { get; set; }
-    public decimal Payable { get; set; }
+    public decimal GSTAmount { get; set; }
+    public decimal PayableAmount { get; set; }
     public List<OrderItemRequest> Items { get; set; }
 }
 

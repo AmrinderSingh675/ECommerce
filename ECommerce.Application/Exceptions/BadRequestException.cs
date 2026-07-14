@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Application.Common.Exceptions;
+﻿namespace ECommerce.Application.Exceptions;
 
 
 // Custom exception class for handling bad request errors in the middleware.

@@ -6,6 +6,7 @@ using ECommerce.Application.Features.Product;
 using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Interfaces.Services;
 using ECommerce.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Application.Services
 {
@@ -13,7 +14,6 @@ namespace ECommerce.Application.Services
     public class OrderService : GenericService<Order, OrderRequest, OrderResponse>, IOrderService
     {
         private readonly IGenericRepository<OrderItem> _orderItemRepository;
-        //private readonly IGenericRepository<Order> _repository;
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
 
@@ -25,28 +25,14 @@ namespace ECommerce.Application.Services
         {
             _orderItemRepository = orderItemRepository;
             _orderRepository = orderRepository;
-            //_repository = repository;
             _mapper = mapper;
         }
 
         public async Task<List<OrderResponse>> GetOrdersAsync(Guid userId)
         {
-            var orders = await _orderRepository.FindAsync(order => order.UserId == userId);
-            return orders.Select(order => new OrderResponse
-            {
-                Id = order.Id,
-                OrderNumber = order.OrderNumber,
-                UserId = order.UserId,
-                ShippingAddress = order.ShippingAddress,
-                City = order.City,
-                State = order.State,
-                Country = order.Country,
-                PostalCode = order.PostalCode,
-                TotalAmount = order.TotalAmount,
-                PaymentMethod = order.PaymentMethod,
-                PaymentStatus = order.PaymentStatus,
-                OrderStatus = order.OrderStatus
-            }).ToList();
+            var result = await _orderRepository.FindAsync(order => order.UserId == userId);
+            var orders = _mapper.Map<List<OrderResponse>>(result);
+            return orders;
         }
 
         public async Task<OrderResponse> GetOrderAsync(int id)
@@ -62,17 +48,17 @@ namespace ECommerce.Application.Services
             //Map the request to your main domain entity
             var order = _mapper.Map<Order>(request);
 
-            //Execute business rule: Save order first to generate the DB Identity ID
-            order.GSTAmount = request.GST;
-            order.TotalAmount = request.Total;
-            order.PayableAmount = request.Payable;
+            //Save order first to generate the DB Identity ID
+            //order.GSTAmount = request.GSTAmount;
+            //order.TotalAmount = request.TotalAmount;
+            //order.PayableAmount = request.PayableAmount;
             order = await _orderRepository.AddAsync(order);
 
-            //Execute business rule: Generate custom Order Number using the generated ID
+            //Generate custom Order Number using the generated ID
             order.OrderNumber = $"ORD-{DateTime.UtcNow:yyyyMMdd}-{order.Id}";
             await _orderRepository.UpdateAsync(order); // Update order with its new number
 
-            //Execute business rule: Handle Child Order Items
+            //Handle Child Order Items
             if (request.Items != null && request.Items.Any())
             {
                 var orderItems = new List<OrderItem>();

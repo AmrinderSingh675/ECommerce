@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using ECommerce.Application.Common.Exceptions;
+using ECommerce.Application.Exceptions;
 
 namespace ECommerce.Api.Middleware;
 

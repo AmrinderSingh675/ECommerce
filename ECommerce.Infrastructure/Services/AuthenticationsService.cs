@@ -1,5 +1,5 @@
 ﻿
-using ECommerce.Application.Common.Exceptions;
+using ECommerce.Application.Exceptions;
 using ECommerce.Application.Features.Authentication;
 using ECommerce.Application.Interfaces.Services;
 using ECommerce.Infrastructure.Identity;
